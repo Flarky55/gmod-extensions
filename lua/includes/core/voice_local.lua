@@ -35,7 +35,7 @@ else
         Enable()
     end
 
-    cvars.AddChangeCallback( CVAR_ENABLED:GetName(), function(_, _, value)
+    cvars.AddChangeCallback( CVAR_ENABLED:GetName(), function( _, _, value )
         if tobool( value ) then
             Enable()
         else
