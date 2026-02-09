@@ -42,6 +42,7 @@ loader.List( "includes/extensions/core", {
     "player_oxygen.lua",
     "player_ragdoll.lua",
     "player_rush.lua",
+    "player_sit.lua",
     "player_stamina.lua",
 
 }, loader.REALM_SHARED)

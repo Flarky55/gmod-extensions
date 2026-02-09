@@ -1,8 +1,9 @@
 local PLAYER = FindMetaTable( "Player" )
 
 local META_ENTITY = FindMetaTable( "Entity" )
+local META_CMoveData = FindMetaTable( "CMoveData" )
 
-local GetNw2Bool, GetNW2Entity = META_ENTITY.GetNW2Bool, META_ENTITY.GetNW2Entity
+local GetNW2Bool, GetNW2Entity = META_ENTITY.GetNW2Bool, META_ENTITY.GetNW2Entity
 
 local KEY_GROUND = "SitGround"
 local KEY_ENTITY = "SitEntity"
@@ -13,7 +14,7 @@ end
 
 
 local function IsSittingOnGround( ply )
-    return GetNW2Bool( ply, KEY )
+    return GetNW2Bool( ply, KEY_GROUND )
 end
 PLAYER.IsSittingOnGround = IsSittingOnGround
 
@@ -30,21 +31,17 @@ local function GetSittingPlayers( ply )
     -- array of players who sits on ply
 end
 
-if SERVER then
-    local function RequestSittingOnGround( ply, state )
-        ply:SetNW2Bool( KEY, state )
-    end
 
-    local function RequestSittingOnEntity( ply, target, state )
+local function RequestSittingOnGround( ply, state )
+    ply:SetNW2Bool( KEY_GROUND, state )
+end
 
-    end
-
-
-    -- concommand.Add( "" )
+local function RequestSittingOnEntity( ply, target, state )
+    
 end
 
 
-hook.Add( "CalcMainActivity", "GroundSit", function( ply, vel )
+hook.Add( "CalcMainActivity", "PlayerSit", function( ply, vel )
     if not IsSittingOnGround( ply ) then return end
     
     if vel:Length2DSqr() < 1 then
@@ -52,12 +49,23 @@ hook.Add( "CalcMainActivity", "GroundSit", function( ply, vel )
     end
 end )
 
-hook.Add( "StartCommand", "GroundSit", function( ply, cmd )
-    if not IsSittinOnGround( ply ) then return end
+hook.Add( "StartCommand", "PlayerSit", function( ply, cmd )
+    if not IsSittingOnGround( ply ) 
+        or cmd:KeyDown( IN_DUCK )
+    then return end
 
-    if cmd:KeyDown( IN_DUCK ) then
-        return
-    end
-
+    cmd:AddKey( IN_DUCK )
     cmd:ClearMovement()
+end )
+
+hook.Add( "KeyPress", "PlayerSit", function( ply, key )
+    if IsSittingOnGround( ply ) then
+        if not ( key == IN_JUMP ) then return end
+
+        RequestSittingOnGround( ply, false )
+    else
+        if not ( key == IN_USE and ply:KeyDown( IN_WALK ) ) then return end
+
+        RequestSittingOnGround( ply, true )
+    end
 end )
