@@ -1,4 +1,4 @@
-require( "api/steam" )
+require( "webapi/steam" )
 
 local PLAYER = FindMetaTable( "Player" )
 

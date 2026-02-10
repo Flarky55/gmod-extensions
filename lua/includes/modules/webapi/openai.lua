@@ -2,7 +2,7 @@ local format = string.format
 local Fetch, Post = http.Fetch, http.Post
 local JSONToTable = util.JSONToTable
 
-module( "openai", package.seeall )
+module( "webapi.openai", package.seeall )
 
 
 local KEY = CreateConVar( "sv_api_openai", "", FCVAR_PROTECTED, "OpenAI key" ):GetString()

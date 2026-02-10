@@ -1,7 +1,7 @@
 local Fetch = http.Fetch
 local JSONToTable = util.JSONToTable
 
-module( "ipapi", package.seeall )
+module( "webapi.ipapi", package.seeall )
 
 
 URL = "http://ip-api.com/json/"

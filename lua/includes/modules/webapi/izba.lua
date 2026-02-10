@@ -1,7 +1,7 @@
 local Fetch = http.Fetch
 local JSONToTable = util.JSONToTable
 
-module( "izba", package.seeall )
+module( "webapi.izba", package.seeall )
 
 
 URL = "http://izbushechka.su/api/"

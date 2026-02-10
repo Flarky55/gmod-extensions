@@ -2,7 +2,7 @@ local format = string.format
 local Fetch = http.Fetch
 local JSONToTable = util.JSONToTable
 
-module( "steamapi", package.seeall )
+module( "webapi.steam", package.seeall )
 
     
 local KEY = CreateConVar( "sv_api_steam", "", FCVAR_PROTECTED, "SteamAPI key" ):GetString()
