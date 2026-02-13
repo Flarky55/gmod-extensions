@@ -8,7 +8,7 @@ else
     local GetPos = FindMetaTable( "Entity" ).GetPos
     local DistToSqr = FindMetaTable( "Vector" ).DistToSqr
 
-    local CVAR_ENABLED = CreateConVar( "voice_local", 1 )
+    local CVAR_ENABLED = CreateConVar( "voice_proximity", 1 )
 
 
     -- TODO: place it into Think with PLAYER:IsSpeaking
@@ -23,11 +23,11 @@ else
 
 
     local function Enable()
-        hook.Add( "PlayerCanHearPlayersVoice", "voice_local", PlayerCanHearPlayersVoice )
+        hook.Add( "PlayerCanHearPlayersVoice", "voice_proximity", PlayerCanHearPlayersVoice )
     end
 
     local function Disable()
-        hook.Remove( "PlayerCanHearPlayersVoice", "voice_local" )
+        hook.Remove( "PlayerCanHearPlayersVoice", "voice_proximity" )
     end
 
 
