@@ -14,10 +14,10 @@ function ServerLog_FormatPlayer( ply )
 end
 
 
-local function Log( str, ignoreFile )
+local function Log( str, callServerLog )
     MsgC( date( "L %x - %X" ), color_white, " " .. str .. "\n" )
 
-    if not ignoreFile then
+    if callServerLog ~= false then
         ServerLog( str .. "\n" )
     end
 end
@@ -26,10 +26,10 @@ end
 local function Initialize()
     for hookName, log in pairs( list.GetForEdit( "ServerLogs" ) ) do
         hook.Add( hookName, "ServerLog", function( ... )
-            local str, ignoreFile = log( Log, ... )
+            local str, callServerLog = log( Log, ... )
             if str == nil then return end
 
-            Log( str, ignoreFile )
+            Log( str, callServerLog )
         end, PRE_HOOK )
     end
 end
