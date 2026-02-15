@@ -126,12 +126,12 @@ if SERVER then
 
 else
 
-    hook.AddOnLocalPlayer( "AdjustMouseSensivity", "Rush", function( lply, defaultSensivity )
-        if not IsRushing( lply ) then return end
+    -- hook.AddOnLocalPlayer( "AdjustMouseSensivity", "Rush", function( lply, defaultSensivity )
+    --     if not IsRushing( lply ) then return end
 
-        if GetTable( lply ).m_bRushForward then
-            return 0.3
-        end
-    end )
+    --     if GetTable( lply ).m_bRushForward then
+    --         return 0.3
+    --     end
+    -- end )
 
 end

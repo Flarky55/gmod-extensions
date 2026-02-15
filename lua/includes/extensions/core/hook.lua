@@ -1,15 +1,33 @@
-if CLIENT then
-    require( "hookextras" ) -- Outfitter
+if sfs == nil then sfs = loader.Shared( "sfs.lua" ) end
 
-    function hook.AddOnLocalPlayer( eventName, identifier, func )    
-        util.OnLocalPlayer( function()
-            local lply = LocalPlayer()
+if SERVER then
 
-            hook.Add( eventName, identifier, function( ... )
-                return func( lply, ... )
-            end )
-        end )
-    end    
+    util.AddNetworkString( "hook.RunClient" )
+
+    function hook.RunClient( recipients, eventName, ... )
+        local encoded, err = sfs.encode( {...} )
+        assert( err, "Failed to encode: " .. err )
+
+        net.Start( "hook.RunClient" )
+
+        net.WriteString( eventName )
+        net.WriteDataEasy( encoded )
+
+        if recipients then net.Send( recipients ) else net.Broadcast() end
+    end
+
+else
+
+    net.Receive( "hook.RunClient", function()
+        local eventName = net.ReadString()
+        local encoded = net.ReadDataEasy()
+
+        local decoded, err = sfs.decode( encoded )
+        assert( err, "Failed to decode: " .. err )
+
+        hook.Run( eventName, unpack( decoded ) )
+    end )
+
 end
 
 function hook.AddOnce( eventName, identifier, func )
