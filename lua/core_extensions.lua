@@ -8,7 +8,7 @@ include( "includes/loader.lua" )
 
 if SERVER then
     loader.List( "includes/modules", {
-        
+
         "deferred.lua",
         "injector.lua",
         "map.lua",
@@ -17,7 +17,7 @@ if SERVER then
 end
 
 loader.List( "includes/extensions/core", {
-    
+
     "globals.lua",
 
     "utf8.lua",
@@ -31,11 +31,12 @@ loader.List( "includes/extensions/core", {
     "net.lua",
     "net_messenger.lua",
     "util.lua",
-    
+
     "cmovedata.lua",
+    "entity.lua",
     "entity_nw3.lua",
     "player.lua",
-    
+
     "player_autojump.lua",
     "player_description.lua",
     "player_nick.lua",

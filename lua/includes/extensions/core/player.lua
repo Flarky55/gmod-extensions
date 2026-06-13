@@ -1,5 +1,11 @@
 local PLAYER = FindMetaTable( "Player" )
 
+local META_ENTITY = FindMetaTable( "Entity" )
+
+local AnimRestartGesture = PLAYER.AnimRestartGesture
+
+local SetLayerDuration = META_ENTITY.SetLayerDuration
+
 local CurTime = CurTime
 
 
@@ -9,6 +15,11 @@ if SERVER then
 
         self:Spawn()
     end
+end
+
+function PLAYER:AnimRestartGestureDuration( slot, activity, autokill, duration )
+    AnimRestartGesture( self, slot, activity, autokill )
+    SetLayerDuration( self, slot, duration )
 end
 
 
