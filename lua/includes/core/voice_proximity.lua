@@ -1,5 +1,5 @@
 if CLIENT then
-    
+
     local CVAR_DISTANCE = CreateClientConVar( "voice_distance", 300, nil, true, "Distance of your voice chat", 150, 1000 )
 
 else
@@ -42,5 +42,5 @@ else
             Disable()
         end
     end )
-    
+
 end
