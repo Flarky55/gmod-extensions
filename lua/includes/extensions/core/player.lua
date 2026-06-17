@@ -8,6 +8,9 @@ local SetLayerDuration = META_ENTITY.SetLayerDuration
 
 local CurTime = CurTime
 
+local BITS_GESTURE_SLOT = 3
+local BITS_ACTIVITY     = 11
+
 
 if SERVER then
     function PLAYER:SpawnReliable()
@@ -15,7 +18,42 @@ if SERVER then
 
         self:Spawn()
     end
+
+
+    util.AddNetworkString( "AnimRestartGestureNetworked" )
+
+    function PLAYER:AnimRestartGestureNetworked( slot, activity, autokill, recipients )
+        net.Start( "AnimRestartGestureNetworked" )
+
+        net.WritePlayer( self )
+        net.WriteUInt( slot, BITS_GESTURE_SLOT )
+        net.WriteUInt( activity, BITS_ACTIVITY )
+        net.WriteBool( autokill )
+
+        if recipients ~= nil then
+            net.Send( recipients )
+        else
+            net.SendPVS( self:GetPos() )
+        end
+	end
+else
+    PLAYER.AnimRestartGestureNetworked = AnimRestartGesture
+
+    net.Receive( "AnimRestartGestureNetworked", function()
+        local ply = net.ReadPlayer()
+        if not IsValid( ply ) then
+            ErrorNoHalt( "Attempt to call AnimRestartGesture on invalid player!", "\n" )
+            return
+        end
+
+        local slot = net.ReadUInt( BITS_GESTURE_SLOT )
+        local activity = net.ReadUInt( BITS_GESTURE_SLOT )
+        local autokill = net.ReadBool()
+
+        AnimRestartGesture( ply, slot, activity, autokill )
+    end )
 end
+
 
 function PLAYER:AnimRestartGestureDuration( slot, activity, autokill, duration )
     AnimRestartGesture( self, slot, activity, autokill )
