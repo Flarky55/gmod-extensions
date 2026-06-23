@@ -2,6 +2,12 @@ local META_PLAYER = FindMetaTable( "Player" )
 local META_WEAPON = FindMetaTable( "Weapon" )
 
 
+function safecall( f, ... )
+    if f == nil then return end
+    return f( ... )
+end
+
+
 function isplayer( any )
     return getmetatable( any ) == META_PLAYER
 end
@@ -14,11 +20,11 @@ if SERVER then
    function SafeRemoveMapCreatedEntity( id )
         local e = ents.GetMapCreatedEntity( id )
         if not IsValid( e ) then return false end
-        
+
         e:Remove()
 
         return true
-    end 
+    end
 end
 
 
@@ -33,7 +39,7 @@ do
         __persistdata_unlocked = true
 
         local HOOK_NAME = "PersistTableLock"
-        
+
         hook.Add( "Tick", HOOK_NAME, function()
             __persistdata_unlocked = false
             hook.Remove( "Tick", HOOK_NAME )
@@ -48,9 +54,9 @@ do
     function PersistedTable( name, default )
         if __persistdata[name] == nil then
             assert( __persistdata_unlocked, "Function called in wrong time (not before first game tick)" )
-            
+
             __persistdata[name] = default
-            
+
             return default
         end
 
@@ -90,11 +96,11 @@ do
         for _, instance in pairs( Instances ) do
             rawset( instance, userid, nil )
         end
-    end ) 
+    end )
 
 
     function PlayerBoundTable( name )
-        if Instances[name] == nil then 
+        if Instances[name] == nil then
             Instances[name] = setmetatable( {}, mt_table )
         end
 
@@ -153,7 +159,7 @@ do
     function mt.__sub(a, b)
         return eval( a, b, sub )
     end
-    
+
     function mt.__mul(a, b)
         return eval( a, b, mul )
     end
@@ -193,7 +199,7 @@ do
 
         hook.Add( "PlayerInitialSpawn", "GlobalTables", function( ply )
             local encoded = sfs.encode( GlobalTables )
-            
+
             net.Start( "SendGlobalTables" )
                 net.WriteData( encoded )
             net.Send( ply )
@@ -253,7 +259,7 @@ if SERVER then
 
 
     util.AddNetworkString( "RequestLocalPlayerUpdate" )
-    
+
     net.Receive( "RequestLocalPlayerUpdate", function( len, ply )
         if not ply:Alive() then return end
 
@@ -281,10 +287,10 @@ if CLIENT then
     local GetTimeoutInfo = GetTimeoutInfo
 
     local g_timingOut = false
-    
+
     hook.Add( "Tick", "TimeoutInfoChanged", function()
         local timingOut, lastPingReceivedTime = GetTimeoutInfo()
-    
+
         if g_timingOut ~= timingOut then
             g_timingOut = timingOut
             hook.Run( "TimeoutInfoChanged", timingOut, lastPingReceivedTime )
