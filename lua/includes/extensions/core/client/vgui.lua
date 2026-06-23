@@ -3,7 +3,7 @@ local min, Round = math.min, math.Round
 
 local Scale; do
     local baseW, baseH = 1920, 1080
-    
+
     local scale = 1
     local setup = function( scrW, scrH ) scale = min( scrW / baseW, scrH / baseH ) end
 
@@ -12,9 +12,9 @@ local Scale; do
     end
 
     setup( ScrW(), ScrH() )
-    
-    -- Why would anyone even need to change screen resolution? 
-    hook.Add( "OnScreenSizeChanged", "vgui", function( oldW, oldH, newW, newH ) 
+
+    -- Why would anyone even need to change screen resolution?
+    hook.Add( "OnScreenSizeChanged", "vgui", function( oldW, oldH, newW, newH )
         setup( newW, newH )
     end )
 end

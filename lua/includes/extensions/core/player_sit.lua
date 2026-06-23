@@ -19,12 +19,12 @@ if CLIENT then
         if not SEQUENCES_GROUND[new] then
             CVAR_SEQUENCE:SetString( SEQUENCES_GROUND[1] )
         end
-    end, "a" )
+    end, "cl_sit_sequence" )
 end
 
 
 local function AddValidSitSequence( sequence )
-    
+
 end
 
 
@@ -37,7 +37,7 @@ local function IsSittingOnEntity( ply, target )
     if target == nil then
         return GetNW2Entity( ply, KEY_ENTITY ) ~= NULL
     end
-    
+
     return GetNW2Entity( ply, KEY_ENTITY ) == target
 end
 PLAYER.IsSittingOnEntity = IsSittingOnEntity
@@ -97,7 +97,7 @@ local function RequestSittingOnEntity( ply, target, tr )
         else
             if SERVER then
                 local vehicle = ply.__veh
-    
+
                 vehicle:Remove()
             end
         end
@@ -115,7 +115,7 @@ local RequestSitting; do
 
             local start     = ply:GetShootPos()
             Trace.start     = start
-            Trace.endpos    = start + ply:GetAimVector() * 72 
+            Trace.endpos    = start + ply:GetAimVector() * 72
             Trace.filter    = ply
 
             local tr = util.TraceLine( Trace )
@@ -125,9 +125,9 @@ local RequestSitting; do
                 RequestSittingOnEntity( ply, target, tr )
             else
                 RequestSittingOnGround( ply, true )
-            end 
+            end
         else
-            if IsSittingOnGround( ply ) then 
+            if IsSittingOnGround( ply ) then
                 RequestSittingOnGround( ply, false )
             elseif IsSittingOnEntity( ply ) then
                 RequestSittingOnEntity( ply, false )
@@ -139,14 +139,14 @@ end
 
 hook.Add( "CalcMainActivity", "PlayerSit", function( ply, vel )
     if not IsSittingOnGround( ply ) then return end
-    
+
     if vel:Length2DSqr() < 1 then
         return ACT_HL2MP_IDLE, GetTable( ply ).m_iSitSequence
     end
 end )
 
 hook.Add( "StartCommand", "PlayerSit", function( ply, cmd )
-    if not IsSittingOnGround( ply ) 
+    if not IsSittingOnGround( ply )
         or cmd:KeyDown( IN_DUCK )
     then return end
 
