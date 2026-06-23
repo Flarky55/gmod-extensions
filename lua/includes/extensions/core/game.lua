@@ -6,8 +6,8 @@ if SERVER then
     end
 
     SetGlobalTable( "Maps", maps )
-    
-    -- SetGlobal2Int( "MapChangeCount", game.GetMapChangeCount() )
+
+    SetGlobal2Int( "MapChangeCount", game.GetMapChangeCount() )
 end
 
 
@@ -15,8 +15,8 @@ function game.GetMaps()
     return GetGlobalTable( "Maps" )
 end
 
--- if CLIENT then
---     function game.GetMapChangeCount()
---         return GetGlobal2Int( "MapChangeCount" )
---     end
--- end
+if CLIENT then
+    function game.GetMapChangeCount()
+        return GetGlobal2Int( "MapChangeCount" )
+    end
+end
