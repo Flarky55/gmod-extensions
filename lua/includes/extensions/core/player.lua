@@ -23,18 +23,18 @@ if SERVER then
     util.AddNetworkString( "AnimRestartGestureNetworked" )
 
     function PLAYER:AnimRestartGestureNetworked( slot, activity, autokill, recipients )
-        net.Start( "AnimRestartGestureNetworked" )
-
-        net.WritePlayer( self )
-        net.WriteUInt( slot, BITS_GESTURE_SLOT )
-        net.WriteUInt( activity, BITS_ACTIVITY )
-        net.WriteBool( autokill )
-
-        if recipients ~= nil then
-            net.Send( recipients )
-        else
-            net.SendPVS( self:GetPos() )
+        if recipients == nil then
+            recipients = RecipientFilter()
+            recipients:AddPVS( self:GetPos() )
+            recipients:RemovePlayer( self )
         end
+
+        net.Start( "AnimRestartGestureNetworked" )
+            net.WritePlayer( self )
+            net.WriteUInt( slot, BITS_GESTURE_SLOT )
+            net.WriteUInt( activity, BITS_ACTIVITY )
+            net.WriteBool( autokill )
+        net.Send( recipients )
 	end
 else
     PLAYER.AnimRestartGestureNetworked = AnimRestartGesture
