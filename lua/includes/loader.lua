@@ -4,7 +4,7 @@ if loader ~= nil then return end
 AddCSLuaFile()
 
 
-local match, gmatch, format, GetFileFromFilename = string.match, string.gmatch, string.format, string.GetFileFromFilename
+local match, format, GetFileFromFilename = string.match, string.format, string.GetFileFromFilename
 local sort = table.sort
 local Find = file.Find
 local include, AddCSLuaFile = include, AddCSLuaFile
@@ -42,12 +42,12 @@ local GetRealmFromFilename; do
     }
 
     GetRealmFromFilename = function( filename )
-        for i = 1, #PATTERNS do         
+        for i = 1, #PATTERNS do
             local substring = match( filename, PATTERNS[i] )
             if substring == nil then continue end
 
             local realm = REALMS[substring]
-            
+
             if realm ~= nil then
                 return realm
             end
@@ -60,7 +60,7 @@ end
 local function GetIncludeFromFilename( filename )
     local realm = GetRealmFromFilename( filename )
     if realm == nil then return nil end
-        
+
     return FUNCTIONS_INCLUDE[realm], realm
 end
 
@@ -91,7 +91,7 @@ local function Dir_Internal( root, fnFile, callback, recursive, order, ... )
             return a < b
         end )
     end
-    
+
     for i = 1, #files do
         fnFile( root .. files[i], callback, ... )
     end
@@ -149,7 +149,7 @@ local function List( root, paths, realm, callback )
 
     local func = FUNCTIONS_INCLUDE[realm]
     assert( func ~= nil, format( "bad argument #3 (unknown realm: %i)", realm ) )
-    
+
     root = root .. "/"
 
     for i = 1, #paths do
