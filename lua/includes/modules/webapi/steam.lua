@@ -4,8 +4,16 @@ local JSONToTable = util.JSONToTable
 
 module( "webapi.steam", package.seeall )
 
-    
-local KEY = CreateConVar( "sv_api_steam", "", FCVAR_PROTECTED, "SteamAPI key" ):GetString()
+
+
+local CVAR_KEY = CreateConVar( "sv_api_steam", "", FCVAR_PROTECTED, "SteamAPI key" )
+
+local KEY; do
+    local setup = function( value ) KEY = value end
+
+    setup( CVAR_KEY:GetString() )
+    cvars.AddChangeCallback( CVAR_KEY:GetName(), cvars.CallbackValue( setup ) )
+end
 
 
 ISteamUser = {}; do
@@ -79,10 +87,10 @@ ISteamNews = {}; do
         onFailure = onFailure or ErrorNoHaltWithStack
 
         local url = format( URL, appid )
-        
+
         if count ~= nil then
             assert( isnumber( count ), "bad argument #4 (number expected)" )
-            
+
             url = url .. "&count=" .. count
         end
 
