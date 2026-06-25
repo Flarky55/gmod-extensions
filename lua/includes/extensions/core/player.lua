@@ -1,3 +1,5 @@
+require( "injector" )
+
 local PLAYER = FindMetaTable( "Player" )
 
 local META_ENTITY = FindMetaTable( "Entity" )
@@ -18,8 +20,9 @@ if SERVER then
 
         self:Spawn()
     end
+end
 
-
+if SERVER then
     util.AddNetworkString( "AnimRestartGestureNetworked" )
 
     function PLAYER:AnimRestartGestureNetworked( slot, activity, autokill, recipients )
@@ -53,7 +56,6 @@ else
         AnimRestartGesture( ply, slot, activity, autokill )
     end )
 end
-
 
 function PLAYER:AnimRestartGestureDuration( slot, activity, autokill, duration )
     AnimRestartGesture( self, slot, activity, autokill )
