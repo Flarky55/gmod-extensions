@@ -38,6 +38,7 @@ loader.List( "includes/extensions/core", {
     "player.lua",
 
     "player_autojump.lua",
+    "player_character.lua",
     "player_description.lua",
     "player_nick.lua",
     "player_oxygen.lua",
