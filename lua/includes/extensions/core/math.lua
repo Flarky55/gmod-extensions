@@ -1,8 +1,18 @@
-local max, Clamp = math.max, math.Clamp
+local random, max, Clamp = math.random, math.max, math.Clamp
 local huge = math.huge
 
 local FrameTime = FrameTime
 
+
+---comment
+---@param n number
+---@param fnRandom function|nil
+---@return boolean
+function math.Chance( n, fnRandom )
+    fnRandom = fnRandom or random
+
+    return fnRandom() < n
+end
 
 function math.IsInRange( n, min, max )
     return n >= min and n <= max
