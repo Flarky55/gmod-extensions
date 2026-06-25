@@ -8,7 +8,7 @@ local Alive, GetMoveType, WaterLevel, IsOnGround = META_ENTITY.Alive, META_ENTIT
 local KeyDown, KeyWasDown, RemoveKey, SetMaxClientSpeed, SetMaxSpeed = META_CMoveData.KeyDown, META_CMoveData.KeyWasDown, META_CMoveData.RemoveKey, META_CMoveData.SetMaxClientSpeed, META_CMoveData.SetMaxSpeed
 local hook_Run = hook.Run
 
-local NAME_CVAR = "cl_autojump" 
+local NAME_CVAR = "cl_autojump"
 
 if CLIENT then
     CreateClientConVar( NAME_CVAR, 1, true, true, nil, 0, 1 )

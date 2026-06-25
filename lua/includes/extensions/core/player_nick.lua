@@ -47,6 +47,6 @@ if SERVER then
         local nick = PersistentNick( ply )
         if nick == nil then return end
 
-        SetFakeNick( ply, nick ) 
+        SetFakeNick( ply, nick )
     end )
 end

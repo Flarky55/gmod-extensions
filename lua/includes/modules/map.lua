@@ -63,11 +63,11 @@ local function map(tbl)
         end
     end
 
-    
+
     if tbl ~= nil then
         for k, v in pairs(tbl) do
             instance[k] = v
-        end 
+        end
     end
 
 
