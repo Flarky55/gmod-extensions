@@ -6,7 +6,7 @@ local META_ENTITY = FindMetaTable( "Entity" )
 
 local AnimRestartGesture = PLAYER.AnimRestartGesture
 
-local SetLayerDuration = META_ENTITY.SetLayerDuration
+local SetModel = META_ENTITY.SetModel
 
 local CurTime = CurTime
 
@@ -19,6 +19,13 @@ if SERVER then
         self:ExitVehicle()
 
         self:Spawn()
+    end
+
+    function PLAYER:SetModel( model )
+        hook.Run( "PlayerModelChanged", self, model )
+        hook.RunClient( nil, "PlayerModelChanged", self, model )
+
+        SetModel( self, model )
     end
 end
 
@@ -57,12 +64,8 @@ else
     end )
 end
 
-function PLAYER:AnimRestartGestureDuration( slot, activity, autokill, duration )
-    AnimRestartGesture( self, slot, activity, autokill )
-    SetLayerDuration( self, slot, duration )
-end
 
-
+-- TODO: rewrite
 local Cache = PlayerBoundTable( "KeyDoublePress" )
 
 hook.Add( "KeyPress", "PlayerExtension", function( ply, key )
