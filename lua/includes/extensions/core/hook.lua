@@ -15,7 +15,7 @@ if SERVER then
 
     function hook.RunClient( recipients, eventName, ... )
         local encoded, err = sfs.encode( {...} )
-        assert( err, "Failed to encode: " .. err )
+        assert( err == nil, "Failed to encode: " .. (err or "") )
 
         net.Start( "hook.RunClient" )
 
@@ -32,7 +32,7 @@ else
         local encoded = net.ReadDataEasy()
 
         local decoded, err = sfs.decode( encoded )
-        assert( err, "Failed to decode: " .. err )
+        assert( err == nil, "Failed to decode: " .. (err or "") )
 
         hook.Run( eventName, unpack( decoded ) )
     end )
