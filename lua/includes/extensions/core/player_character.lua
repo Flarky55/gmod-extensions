@@ -64,33 +64,37 @@ end
 player_manager.AddValidKillSound = AddValidKillSound
 
 
--- TODO: not working on CLIENT
-hook.Add( "PlayerModelChanged", "PlayerCharacter", function( ply, cl_playermodel )
+hook.Add( "PlayerModelChanged", "PlayerCharacter", function( ply, model )
     if GetInfoNum( ply, NAME_SOUND_ENABLED, 1 ) == 0 then return end
 
-    ply.m_tCharacter_Footstep = SoundsFootstep[cl_playermodel]
+    local modelname = player_manager.TranslateToPlayerModelName( model )
+
+    ply.m_tCharacter_Footstep = SoundsFootstep[modelname]
 
     if SERVER then
-        ply.m_tCharacter_Death  = SoundsDeath[cl_playermodel]
-        ply.m_tCharacter_Damage = SoundsDamage[cl_playermodel]
-        ply.m_tCharacter_Kill   = SoundsKill[cl_playermodel]
+        ply.m_tCharacter_Death  = SoundsDeath[modelname]
+        ply.m_tCharacter_Damage = SoundsDamage[modelname]
+        ply.m_tCharacter_Kill   = SoundsKill[modelname]
     end
 end )
 
 
-hook.Add( "PlayerFootstep", "PlayerCharacter", function( ply, pos, foot, _, volume, _ )
+hook.Add( "PlayerFootstep", "PlayerCharacter", function( ply, pos, foot, _, volume, filter )
     if GetInfoNum( ply, NAME_SOUND_FOOTSTEPS, 1 ) ~= 1 then return end
 
     local sounds = ply.m_tCharacter_Footstep
     if sounds == nil then return end
 
-    sounds = IsSprinting( ply ) and sounds.SPRINT or sounds.DEFAULT or sounds
+    if #sounds == 0 then
+        sounds = IsSprinting( ply ) and sounds.SPRINT or sounds.DEFAULT
+    end
+    if sounds == nil then return end
 
     if sounds.Chance ~= nil and not math.Chance( sounds.Chance, SharedRadomIntFootsteps ) then return end
 
     -- Use `EmitSound` instead of `ENTITY:EmitSound` as here we can set volume, which will be overriden by the sound script if use `ENTITY:EmitSound`
     --  https://wiki.facepunch.com/gmod/Entity:EmitSound#description
-    EmitSound( sounds[foot + 1], pos, EntIndex( ply ), nil, volume * 0.4, nil, nil, nil, nil, nil )
+    EmitSound( sounds[foot + 1], pos, EntIndex( ply ), nil, volume * 0.4, nil, nil, nil, nil, filter )
 
     return true
 end )
@@ -162,7 +166,8 @@ local DMG_COMMON = bit.bor( DMG_GENERIC, DMG_SLASH, DMG_BULLET, DMG_SHOCK )
         MetroPolice
 --]]
 local POLICE_FOOTSTEP = {
-    DEFAULT = { "NPC_MetroPolice.FootstepLeft", "NPC_MetroPolice.FootstepRight" },
+    -- Don't use default sounds as they're not working with `EmitSound` (???)
+    -- DEFAULT = { "NPC_MetroPolice.FootstepLeft", "NPC_MetroPolice.FootstepRight" },
     SPRINT  = {
         "NPC_MetroPolice.RunFootstepLeft", "NPC_MetroPolice.RunFootstepRight",
         Chance = 0.66
@@ -208,7 +213,8 @@ for _, entry in ipairs( POLICE_KILL ) do AddValidKillSound( "police", entry ) en
         Combine
 --]]
 local COMBINE_FOOTSTEP = {
-    DEFAULT = { "NPC_CombineS.FootstepLeft", "NPC_CombineS.FootstepRight" },
+    -- Don't use default sounds as they're not working with `EmitSound` (???)
+    -- DEFAULT = { "NPC_CombineS.FootstepLeft", "NPC_CombineS.FootstepRight" },
     SPRINT  = {
         "NPC_CombineS.RunFootstepLeft", "NPC_CombineS.RunFootstepRight",
         Chance = 0.66
@@ -248,7 +254,8 @@ for _, entry in ipairs( COMBINE_KILL ) do AddValidKillSound( "combineprison", en
         Citizens
 --]]
 local CITIZEN_FOOTSTEP = {
-    DEFAULT = { "NPC_Citizen.FootstepLeft", "NPC_Citizen.FootstepRight" },
+    -- Don't use default sounds as they're not working with `EmitSound` (???)
+    -- DEFAULT = { "NPC_Citizen.FootstepLeft", "NPC_Citizen.FootstepRight" },
     SPRINT  = {
         "NPC_Citizen.RunFootstepLeft", "NPC_Citizen.RunFootstepRight",
         Chance = 0.33
@@ -265,7 +272,7 @@ local CITIZEN_KILL = {}; do
     for i, sound in ipairs( {
         "npc_citizen.gotone01", "npc_citizen.gotone02"
     } ) do
-        CITIZEN_KILL[i] = { Sound = sound, DamageType = DMG_COMMON, Chance = 0.3 }
+        CITIZEN_KILL[i] = { Sound = sound, DamageType = DMG_COMMON, Chance = 0.6 }
     end
 end
 
