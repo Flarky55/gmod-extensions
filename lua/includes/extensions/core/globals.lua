@@ -326,3 +326,11 @@ if CLIENT then
         return player_entity
     end )
 end
+
+
+if SERVER then
+    scripted_ents.Register( {
+        Base = "base_point",
+        Type = "point"
+    }, "info_ladder" )
+end
